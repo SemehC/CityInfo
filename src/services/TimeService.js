@@ -1,15 +1,16 @@
 import axios from 'axios';
-const API_BASE = 'https://api.open-meteo.com/v1/forecast?';
+const API_BASE = 'https://api.geotimezone.com/public/timezone?';
 
-export const fetchWeatherData = latlng => {
-  const endpoint = `${API_BASE}latitude=${latlng[0]}&longitude=${latlng[1]}&current=is_day,apparent_temperature,rain,snowfall`;
+export const getLatLngTime = latlng => {
+  const endpoint = `${API_BASE}latitude=${latlng[0]}&longitude=${latlng[1]}`;
+
   return new Promise(resolve => {
     axios
       .get(endpoint)
       .then(res => {
         if (res.status == 200) {
           let data = res.data;
-          resolve(data);
+          resolve(data.current_local_datetime);
         } else {
           resolve(null);
         }

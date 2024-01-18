@@ -5,12 +5,14 @@ import BackArrowIcon from './../assets/back_arrow.svg';
 import SunnyIcon from './../assets/sunny.svg';
 import SnowyIcon from './../assets/snowy.svg';
 import RainyIcon from './../assets/rainy.svg';
+import Clock from './Clock';
 
 /**
  *
  * @param {{
  * title:string,
  * temp:number,
+ * startTime:string,
  * weather:('rainy'|'sunny'|'snowy')
  * onGoBack:Function,
  * }} props
@@ -51,6 +53,7 @@ const DetailsHeader = props => {
         <Text style={styles.titleText}>{props.temp}°C</Text>
       </View>
       <View>{getWeatherIcon()}</View>
+      <View>{props.startTime && <Clock currentTime={props.startTime} />}</View>
     </View>
   );
 };

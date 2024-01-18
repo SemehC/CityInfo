@@ -24,7 +24,6 @@ export const searchCities = cityName => {
         }
       })
       .catch(err => {
-        console.log('Axios error : ', err);
         resolve([]);
       });
   });
@@ -45,7 +44,6 @@ export const getCityDetails = cityName => {
         }
       })
       .catch(err => {
-        console.log('Axios error : ', err);
         resolve(null);
       });
   });

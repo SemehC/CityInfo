@@ -13,21 +13,29 @@ import DetailsHeader from '../components/DetailsHeader';
 import {getCityDetails} from '../services/CitiesService';
 import Animated from 'react-native-reanimated';
 import {fetchWeatherData} from '../services/WeatherService';
+import Background from '../components/Background';
+import OverlayBackground from '../components/OverlayBackground';
+import {getLatLngTime} from '../services/TimeService';
 
 const DetailsPage = props => {
   const [country, setCountry] = useState(null);
+  const [startTime, setStartTime] = useState(null);
   const [weather, setWeather] = useState(null);
+  const [bgType, setBgType] = useState('day night');
+
   useEffect(() => {
+    setStartTime(null);
     try {
       let name = props.route.params.country.title;
       getCityDetails(name).then(res => {
         setCountry(res);
         checkWeather(res.latlng);
+        checkTime(res.latlng);
       });
     } catch (error) {
       setCountry(null);
     }
-  }, []);
+  }, [props]);
 
   const checkWeather = latlng => {
     fetchWeatherData(latlng).then(res => {
@@ -35,11 +43,21 @@ const DetailsPage = props => {
       let wtype = 'sunny';
       if (data.rain > 0) wtype = 'rainy';
       if (data.snowfall > 0) wtype = 'snowy';
+      setBgType(data.is_day == 1 ? 'day' : 'night');
+
       setWeather({
         type: wtype,
         temp: data.apparent_temperature,
       });
     });
+  };
+
+  const checkTime = latLng => {
+    getLatLngTime(latLng)
+      .then(res => {
+        setStartTime(res);
+      })
+      .catch(err => {});
   };
 
   const onGoBack = () => {
@@ -48,15 +66,23 @@ const DetailsPage = props => {
 
   return (
     <>
+      {country && weather && (
+        <>
+          <OverlayBackground type={weather ? weather.type : 'sunny'} />
+          <Background type={bgType} />
+        </>
+      )}
       <DetailsHeader
         title={country && country.name.common}
         temp={weather ? weather.temp : ''}
         weather={weather ? weather.type : 'sunny'}
         onGoBack={onGoBack}
+        startTime={startTime}
       />
       <ScrollView
         style={{
           flex: 1,
+          zIndex: 10,
         }}
         contentContainerStyle={{
           justifyContent: 'center',

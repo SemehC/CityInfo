@@ -7,13 +7,20 @@ import Animated, {
   SlideInLeft,
 } from 'react-native-reanimated';
 import CityInput from '../components/inputs/CityInput';
+import Background from '../components/Background';
+import Clock from '../components/Clock';
 
 const HomePage = props => {
   const [selectedCounty, setSelectedCountry] = useState(null);
 
   return (
     <View style={styles.container}>
-      <Animated.View entering={FadeInUp} style={styles.titleContainer}>
+      <Background type="day night" />
+
+      <Animated.View
+        entering={FadeInUp}
+        style={styles.titleContainer}
+        needsOffscreenAlphaCompositing={true}>
         <Text style={styles.titleText}>City Info</Text>
       </Animated.View>
       <View>
@@ -62,15 +69,17 @@ export default HomePage;
 const styles = StyleSheet.create({
   container: {
     // backgroundColor: '#f0f0f0',
-    backgroundColor: '#f0f0f0',
     flex: 1,
   },
   titleContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    alignSelf: 'center',
+    borderRadius: 5,
     marginVertical: 10,
+    backgroundColor: 'rgba(224, 219, 219, 0.7)',
   },
   titleText: {
+    padding: 5,
+    borderRadius: 5,
     fontSize: 25,
     fontWeight: 'bold',
     color: '#184351',
@@ -80,9 +89,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   countryName: {
-    marginVertical: 5,
+    marginTop: 5,
     fontSize: 25,
     color: '#184351',
+    backgroundColor: 'rgba(224, 219, 219, 0.7)',
+    borderRadius: 5,
+    padding: 5,
   },
   imageStyle: {
     height: Dimensions.get('screen').width * 0.6,
